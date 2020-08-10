@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+
+  caddy:
+    build: .
+    image: stutzlab/caddy-ingress
+    labels:
+      - caddy.order=prometheus first
+    ports:
+      - 8080:80
+      - 8443:443
+      - 9180:9180
+    # command: -email test@test.com -agree=true -log stdout docker-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy:/root
+
+  helloworld:
+    image: whalesalad/docker-debug
+    # ports:
+    #   - 8080:8080
+    labels:
+      - caddy=localhost
+      - caddy.prometheus=0.0.0.0:9180
+      - caddy.reverse_proxy={{upstreams 8080}}
+      - caddy.encode=gzip
+
+volumes:
+  caddy:
+

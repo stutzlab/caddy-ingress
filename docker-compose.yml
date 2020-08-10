@@ -22,9 +22,9 @@ services:
     #   - 8080:8080
     labels:
       - caddy=localhost
-      - caddy.prometheus=0.0.0.0:9180
       - caddy.reverse_proxy={{upstreams 8080}}
       - caddy.encode=gzip
+      - caddy.prometheus=0.0.0.0:9180
 
 volumes:
   caddy:
